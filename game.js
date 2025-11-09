@@ -333,6 +333,12 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('keyup', (e) => {
   keys[e.key] = false;
+  
+  // Extra safety: clear all possible key variations
+  if (e.key.length === 1) {
+    keys[e.key.toLowerCase()] = false;
+    keys[e.key.toUpperCase()] = false;
+  }
 });
 
 // Touch controls for mobile
@@ -378,18 +384,24 @@ canvas.addEventListener('touchend', () => {
 });
 
 function updatePaddles() {
-  if (gamePaused || !gameStarted || gameOver) return;
+  if (gamePaused || !gameStarted || gameOver) {
+    player1.dy = 0;
+    player2.dy = 0;
+    return;
+  }
   
   // Player 1 controls (dynamic based on settings)
-  const p1UpKey = player1Controls.up.toLowerCase();
-  const p1DownKey = player1Controls.down.toLowerCase();
+  const p1Up = keys[player1Controls.up] || keys[player1Controls.up.toLowerCase()] || keys[player1Controls.up.toUpperCase()];
+  const p1Down = keys[player1Controls.down] || keys[player1Controls.down.toLowerCase()] || keys[player1Controls.down.toUpperCase()];
   
-  if (keys[p1UpKey] || keys[p1UpKey.toUpperCase()] || keys[player1Controls.up]) {
-    player1.dy = -PADDLE_SPEED;
-  } else if (keys[p1DownKey] || keys[p1DownKey.toUpperCase()] || keys[player1Controls.down]) {
-    player1.dy = PADDLE_SPEED;
-  } else if (!touchPaddle || touchPaddle !== player1) {
-    player1.dy = 0;
+  if (!touchPaddle || touchPaddle !== player1) {
+    if (p1Up && !p1Down) {
+      player1.dy = -PADDLE_SPEED;
+    } else if (p1Down && !p1Up) {
+      player1.dy = PADDLE_SPEED;
+    } else {
+      player1.dy = 0;
+    }
   }
 
   // Player 2 controls (Arrow Up/Down or AI)
@@ -410,15 +422,17 @@ function updatePaddles() {
       player2.dy = 0;
     }
   } else {
-    const p2UpKey = player2Controls.up.toLowerCase();
-    const p2DownKey = player2Controls.down.toLowerCase();
+    const p2Up = keys[player2Controls.up] || keys[player2Controls.up.toLowerCase()] || keys[player2Controls.up.toUpperCase()];
+    const p2Down = keys[player2Controls.down] || keys[player2Controls.down.toLowerCase()] || keys[player2Controls.down.toUpperCase()];
     
-    if (keys[p2UpKey] || keys[p2UpKey.toUpperCase()] || keys[player2Controls.up]) {
-      player2.dy = -PADDLE_SPEED;
-    } else if (keys[p2DownKey] || keys[p2DownKey.toUpperCase()] || keys[player2Controls.down]) {
-      player2.dy = PADDLE_SPEED;
-    } else if (!touchPaddle || touchPaddle !== player2) {
-      player2.dy = 0;
+    if (!touchPaddle || touchPaddle !== player2) {
+      if (p2Up && !p2Down) {
+        player2.dy = -PADDLE_SPEED;
+      } else if (p2Down && !p2Up) {
+        player2.dy = PADDLE_SPEED;
+      } else {
+        player2.dy = 0;
+      }
     }
   }
 
@@ -426,14 +440,22 @@ function updatePaddles() {
   if (touchPaddle !== player1) player1.y += player1.dy;
   if (touchPaddle !== player2) player2.y += player2.dy;
 
-  // Boundary checks
-  if (player1.y < 0) player1.y = 0;
+  // Boundary checks with safety stop
+  if (player1.y < 0) {
+    player1.y = 0;
+    player1.dy = 0; // Stop at boundary
+  }
   if (player1.y + player1.height > canvas.height) {
     player1.y = canvas.height - player1.height;
+    player1.dy = 0; // Stop at boundary
   }
-  if (player2.y < 0) player2.y = 0;
+  if (player2.y < 0) {
+    player2.y = 0;
+    player2.dy = 0; // Stop at boundary
+  }
   if (player2.y + player2.height > canvas.height) {
     player2.y = canvas.height - player2.height;
+    player2.dy = 0; // Stop at boundary
   }
   
   // Decay hit flash
