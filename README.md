@@ -7,6 +7,12 @@ A modern, feature-rich browser-based ping pong game built with HTML5 Canvas and 
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
+## 🎮 Game Preview
+
+![Ping Pong Game Screenshot](Preview%20PingPong.png)
+
+*Live gameplay showing particle effects, ball trail, and real-time statistics*
+
 ## ✨ Features
 
 ### 🎮 Game Modes
