@@ -209,10 +209,10 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ## 👨‍💻 Author
 
-**Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Portfolio: [yourwebsite.com](https://yourwebsite.com)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
+**Abdullah Khudeish**
+
+- GitHub: [@parpy69](https://github.com/parpy69)
+- LinkedIn: [Abdullah Khudeish](https://www.linkedin.com/in/abdullah-khudeish-3a010923a/)
 
 ## ⭐ Show Your Support
 
