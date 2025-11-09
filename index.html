@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Game</title>
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        html {
+          background: #0f2027;
+        }
+
+        body {
+          font-family: 'Arial', sans-serif;
+          background-color: #0f2027;
+          background-image: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+          background-attachment: fixed;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          color: white;
+          overflow: hidden;
+          position: fixed;
+          width: 100%;
+          height: 100%;
+          overscroll-behavior: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .container {
+          text-align: center;
+        }
+
+        h1 {
+          font-size: 3rem;
+          margin-bottom: 1rem;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .mode-select {
+          background: rgba(0, 0, 0, 0.3);
+          padding: 2rem;
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mode-select h2 {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+        }
+
+        .mode-select p {
+          font-size: 1.1rem;
+          margin-bottom: 1.5rem;
+          opacity: 0.9;
+        }
+
+        .mode-btn {
+          display: block;
+          width: 100%;
+          max-width: 300px;
+          margin: 1rem auto;
+          padding: 1rem 2rem;
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: white;
+          background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-radius: 8px;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .mode-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .mode-btn:active {
+          transform: translateY(0);
+        }
+
+        .difficulty-btn {
+          display: block;
+          width: 100%;
+          max-width: 300px;
+          margin: 0.8rem auto;
+          padding: 0.8rem 2rem;
+          font-size: 1.1rem;
+          font-weight: bold;
+          color: white;
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-radius: 8px;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .difficulty-btn.easy {
+          background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        }
+
+        .difficulty-btn.medium {
+          background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        }
+
+        .difficulty-btn.hard {
+          background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+
+        .difficulty-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-btn:active {
+          transform: translateY(0);
+        }
+
+        .game-container {
+          animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .controls {
+          margin-bottom: 1rem;
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+
+        .controls p {
+          margin: 0.3rem 0;
+        }
+
+        canvas {
+          background: #0a0e1a;
+          border: 4px solid rgba(255, 255, 255, 0.2);
+          border-radius: 8px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+          display: block;
+          margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ping Pong</h1>
+        <div id="modeSelect" class="mode-select">
+            <h2>Select Game Mode</h2>
+            <p>First to 5 points wins!</p>
+            <button id="pvpBtn" class="mode-btn">Player vs Player</button>
+            <button id="aiBtn" class="mode-btn">Player vs AI</button>
+        </div>
+        <div id="difficultySelect" class="mode-select" style="display: none;">
+            <h2>Select Difficulty</h2>
+            <p>Choose your challenge level</p>
+            <button class="difficulty-btn easy" data-difficulty="easy">Easy</button>
+            <button class="difficulty-btn medium" data-difficulty="medium">Medium</button>
+            <button class="difficulty-btn hard" data-difficulty="hard">Hard</button>
+        </div>
+        <div id="gameContainer" class="game-container" style="display: none;">
+            <div class="controls">
+                <p id="controlsText">Player 1: W/S keys | Player 2: ↑/↓ keys</p>
+                <p>Press SPACE to start/pause | Press ESC for main menu</p>
+                <p style="font-size: 0.8rem; opacity: 0.7;">📱 Touch controls: Tap and drag on left/right side</p>
+            </div>
+            <canvas id="gameCanvas"></canvas>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
