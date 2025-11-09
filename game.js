@@ -8,8 +8,8 @@ const PADDLE_WIDTH = 15;
 const PADDLE_HEIGHT = 100;
 const BALL_SIZE = 15;
 const PADDLE_SPEED = 6;
-const INITIAL_BALL_SPEED = 5;
-const SPEED_INCREMENT = 0.003;
+const INITIAL_BALL_SPEED = 7;
+const SPEED_INCREMENT = 0.008;
 
 let gameStarted = false;
 let gamePaused = false;
@@ -498,9 +498,14 @@ function updateBall() {
     ball.y > player1.y &&
     ball.y < player1.y + player1.height
   ) {
-    ball.dx = Math.abs(ball.dx);
+    // Calculate angle based on where ball hits paddle
     const hitPos = (ball.y - (player1.y + player1.height / 2)) / (player1.height / 2);
-    ball.dy = hitPos * ball.speed;
+    const angle = hitPos * (Math.PI / 4); // Max 45 degrees
+    
+    // Set velocity to maintain current speed
+    ball.dx = Math.abs(ball.speed * Math.cos(angle));
+    ball.dy = ball.speed * Math.sin(angle);
+    
     playHitSound();
     player1.hitFlash = 10;
     createExplosion(ball.x, ball.y, 'rgb(255, 107, 53)', 15);
@@ -515,9 +520,14 @@ function updateBall() {
     ball.y > player2.y &&
     ball.y < player2.y + player2.height
   ) {
-    ball.dx = -Math.abs(ball.dx);
+    // Calculate angle based on where ball hits paddle
     const hitPos = (ball.y - (player2.y + player2.height / 2)) / (player2.height / 2);
-    ball.dy = hitPos * ball.speed;
+    const angle = hitPos * (Math.PI / 4); // Max 45 degrees
+    
+    // Set velocity to maintain current speed
+    ball.dx = -Math.abs(ball.speed * Math.cos(angle));
+    ball.dy = ball.speed * Math.sin(angle);
+    
     playHitSound();
     player2.hitFlash = 10;
     createExplosion(ball.x, ball.y, 'rgb(0, 217, 255)', 15);
