@@ -81,7 +81,7 @@ Or simply double-click the `index.html` file.
 
 ### Live Demo
 
-[Play the game here](#) *(Add your GitHub Pages link)*
+[Play the game here](#) *(https://pingponggame-gray.vercel.app/)*
 
 ## 🎮 How to Play
 
