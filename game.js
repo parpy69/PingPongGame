@@ -7,7 +7,7 @@ canvas.height = 600;
 const PADDLE_WIDTH = 15;
 const PADDLE_HEIGHT = 100;
 const BALL_SIZE = 15;
-const PADDLE_SPEED = 6;
+const PADDLE_SPEED = 8;
 const INITIAL_BALL_SPEED = 7;
 const SPEED_INCREMENT = 0.008;
 
