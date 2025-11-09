@@ -21,6 +21,16 @@ let winner = '';
 let aiDifficulty = 'medium';
 const WINNING_SCORE = 5;
 
+// Control settings
+let player1Controls = {
+  up: 'w',
+  down: 's',
+};
+let player2Controls = {
+  up: 'ArrowUp',
+  down: 'ArrowDown',
+};
+
 // Statistics
 let stats = {
   currentRally: 0,
@@ -182,6 +192,65 @@ const AI_SETTINGS = {
   hard: { speed: 1.1, reactionDelay: 2, errorMargin: 5 },
 };
 
+// Settings modal
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  document.getElementById('settingsModal').style.display = 'flex';
+});
+
+document.getElementById('closeSettings').addEventListener('click', () => {
+  document.getElementById('settingsModal').style.display = 'none';
+});
+
+document.getElementById('p1ControlWS').addEventListener('click', () => {
+  player1Controls = { up: 'w', down: 's' };
+  updateControlButtons();
+  updateControlsText();
+});
+
+document.getElementById('p1ControlArrows').addEventListener('click', () => {
+  player1Controls = { up: 'ArrowUp', down: 'ArrowDown' };
+  updateControlButtons();
+  updateControlsText();
+});
+
+document.getElementById('p2ControlWS').addEventListener('click', () => {
+  player2Controls = { up: 'w', down: 's' };
+  updateControlButtons();
+  updateControlsText();
+});
+
+document.getElementById('p2ControlArrows').addEventListener('click', () => {
+  player2Controls = { up: 'ArrowUp', down: 'ArrowDown' };
+  updateControlButtons();
+  updateControlsText();
+});
+
+function updateControlButtons() {
+  // Player 1
+  document.getElementById('p1ControlWS').classList.toggle('active', 
+    player1Controls.up === 'w');
+  document.getElementById('p1ControlArrows').classList.toggle('active', 
+    player1Controls.up === 'ArrowUp');
+  
+  // Player 2
+  document.getElementById('p2ControlWS').classList.toggle('active', 
+    player2Controls.up === 'w');
+  document.getElementById('p2ControlArrows').classList.toggle('active', 
+    player2Controls.up === 'ArrowUp');
+}
+
+function updateControlsText() {
+  const p1Text = player1Controls.up === 'w' ? 'W/S' : '↑/↓';
+  const p2Text = player2Controls.up === 'w' ? 'W/S' : '↑/↓';
+  
+  if (aiMode) {
+    document.getElementById('controlsText').textContent = `Use ${p1Text} keys to move`;
+  } else {
+    document.getElementById('controlsText').textContent = 
+      `Player 1: ${p1Text} keys | Player 2: ${p2Text} keys`;
+  }
+}
+
 // Mode selection
 document.getElementById('pvpBtn').addEventListener('click', () => {
   aiMode = false;
@@ -201,13 +270,14 @@ document.querySelectorAll('.difficulty-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
     aiDifficulty = e.target.dataset.difficulty;
     document.getElementById('difficultySelect').style.display = 'none';
-    document.getElementById('controlsText').textContent = 'Use W/S keys to move';
+    updateControlsText();
     startGame();
   });
 });
 
 function startGame() {
   document.getElementById('gameContainer').style.display = 'block';
+  updateControlsText();
   audioContext.resume(); // Start audio context
 }
 
@@ -236,7 +306,6 @@ function returnToMainMenu() {
   resetBall(1);
   document.getElementById('gameContainer').style.display = 'none';
   document.getElementById('modeSelect').style.display = 'block';
-  document.getElementById('controlsText').textContent = 'Player 1: W/S keys | Player 2: ↑/↓ keys';
 }
 
 document.addEventListener('keydown', (e) => {
@@ -311,10 +380,13 @@ canvas.addEventListener('touchend', () => {
 function updatePaddles() {
   if (gamePaused || !gameStarted || gameOver) return;
   
-  // Player 1 controls (W/S)
-  if (keys['w'] || keys['W']) {
+  // Player 1 controls (dynamic based on settings)
+  const p1UpKey = player1Controls.up.toLowerCase();
+  const p1DownKey = player1Controls.down.toLowerCase();
+  
+  if (keys[p1UpKey] || keys[p1UpKey.toUpperCase()] || keys[player1Controls.up]) {
     player1.dy = -PADDLE_SPEED;
-  } else if (keys['s'] || keys['S']) {
+  } else if (keys[p1DownKey] || keys[p1DownKey.toUpperCase()] || keys[player1Controls.down]) {
     player1.dy = PADDLE_SPEED;
   } else if (!touchPaddle || touchPaddle !== player1) {
     player1.dy = 0;
@@ -338,9 +410,12 @@ function updatePaddles() {
       player2.dy = 0;
     }
   } else {
-    if (keys['ArrowUp']) {
+    const p2UpKey = player2Controls.up.toLowerCase();
+    const p2DownKey = player2Controls.down.toLowerCase();
+    
+    if (keys[p2UpKey] || keys[p2UpKey.toUpperCase()] || keys[player2Controls.up]) {
       player2.dy = -PADDLE_SPEED;
-    } else if (keys['ArrowDown']) {
+    } else if (keys[p2DownKey] || keys[p2DownKey.toUpperCase()] || keys[player2Controls.down]) {
       player2.dy = PADDLE_SPEED;
     } else if (!touchPaddle || touchPaddle !== player2) {
       player2.dy = 0;

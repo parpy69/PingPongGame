@@ -32,12 +32,13 @@ A modern, feature-rich browser-based ping pong game built with HTML5 Canvas and 
   - Victory fanfare
 
 ### 📱 Cross-Platform Controls
-- **Keyboard Controls**
-  - Player 1: `W` / `S` keys
-  - Player 2: `↑` / `↓` arrow keys
+- **Keyboard Controls** (Customizable!)
+  - Player 1: `W` / `S` keys (default) or Arrow keys
+  - Player 2: `↑` / `↓` arrow keys (default) or `W` / `S` keys
   - `SPACE` - Start/Pause game
   - `ESC` - Return to main menu
 - **Touch Controls** - Tap and drag on left/right side of screen for mobile gameplay
+- **Settings Menu** - Change control schemes for each player from the main menu
 
 ### 📊 Statistics Tracking
 - Real-time rally counter during gameplay
@@ -79,26 +80,29 @@ Or simply double-click the `index.html` file.
 ## 🎮 How to Play
 
 1. **Select Game Mode** - Choose between Player vs Player or Player vs AI
-2. **Choose Difficulty** (AI mode only) - Pick Easy, Medium, or Hard
-3. **Press SPACE** to start the game
-4. **Control Your Paddle**:
-   - Player 1: Use `W` (up) and `S` (down)
-   - Player 2: Use `↑` (up) and `↓` (down)
+2. **(Optional) Customize Controls** - Click "⚙️ Controls Settings" to change key bindings
+3. **Choose Difficulty** (AI mode only) - Pick Easy, Medium, or Hard
+4. **Press SPACE** to start the game
+5. **Control Your Paddle**:
+   - Player 1: Use `W` (up) and `S` (down) by default
+   - Player 2: Use `↑` (up) and `↓` (down) by default
    - Mobile: Tap and drag on your side of the screen
-5. **Score Points** - Make your opponent miss the ball
-6. **First to 5 Wins!**
+   - Or customize in settings to swap controls!
+6. **Score Points** - Make your opponent miss the ball
+7. **First to 5 Wins!**
 
 ### Controls Reference
 
-| Action | Key/Input |
-|--------|-----------|
-| Move Up (P1) | `W` |
-| Move Down (P1) | `S` |
-| Move Up (P2) | `↑` |
-| Move Down (P2) | `↓` |
-| Start/Pause | `SPACE` |
-| Main Menu | `ESC` |
-| Touch Control | Drag on screen |
+| Action | Key/Input | Customizable? |
+|--------|-----------|---------------|
+| Move Up (P1) | `W` (default) or `↑` | ✅ Yes |
+| Move Down (P1) | `S` (default) or `↓` | ✅ Yes |
+| Move Up (P2) | `↑` (default) or `W` | ✅ Yes |
+| Move Down (P2) | `↓` (default) or `S` | ✅ Yes |
+| Start/Pause | `SPACE` | ❌ No |
+| Main Menu | `ESC` | ❌ No |
+| Touch Control | Drag on screen | ❌ No |
+| Open Settings | Main menu button | - |
 
 ## 🛠️ Technologies Used
 
@@ -109,6 +113,13 @@ Or simply double-click the `index.html` file.
 - **Vanilla JavaScript** - No frameworks or libraries
 
 ## 🎯 Technical Highlights
+
+### Customizable Controls System
+Players can choose their preferred control scheme:
+- Independent control settings for each player
+- Swap between WASD and Arrow keys
+- Settings persist during gameplay session
+- Dynamic control text updates based on configuration
 
 ### AI Implementation
 The AI opponent uses a dynamic tracking algorithm with configurable parameters:
@@ -168,12 +179,14 @@ const AI_SETTINGS = {
 
 ## 🔮 Future Enhancements
 
+- [x] Customizable control schemes ✅
 - [ ] Power-ups system (speed boost, paddle size)
 - [ ] Online multiplayer support
 - [ ] Leaderboard with localStorage
 - [ ] Additional game modes (survival, time attack)
 - [ ] Customizable themes and color schemes
 - [ ] Tournament bracket system
+- [ ] Saved control preferences (localStorage)
 
 ## 📝 License
 
