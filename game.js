@@ -717,12 +717,17 @@ function draw() {
   // Draw particles
   drawParticles();
 
-  // Draw "Press SPACE to start" message
+  // Draw "Press SPACE to start" or "Touch to start" message
   if (!gameStarted && !gameOver) {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.font = '30px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('Press SPACE to start', canvas.width / 2, canvas.height / 2 + 50);
+    
+    // Detect if device is touch-capable
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const message = isTouchDevice ? 'Touch to start' : 'Press SPACE to start';
+    
+    ctx.fillText(message, canvas.width / 2, canvas.height / 2 + 50);
   }
 
   // Draw score message
