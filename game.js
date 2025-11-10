@@ -281,6 +281,11 @@ function startGame() {
   audioContext.resume(); // Start audio context
 }
 
+// Mobile menu button
+document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+  returnToMainMenu();
+});
+
 function resetGame() {
   player1.score = 0;
   player2.score = 0;
@@ -347,30 +352,47 @@ let touchPaddle = null;
 
 canvas.addEventListener('touchstart', (e) => {
   e.preventDefault();
+  
+  // Start game if not started
+  if (!gameStarted && !gameOver) {
+    gameStarted = true;
+    gamePaused = false;
+    audioContext.resume();
+  }
+  
   const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
-  const x = touch.clientX - rect.left;
-  const y = touch.clientY - rect.top;
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = (touch.clientX - rect.left) * scaleX;
+  const y = (touch.clientY - rect.top) * scaleY;
   
   touchStartY = y;
   
   // Determine which paddle to control based on touch position
-  if (x < canvas.width / 2) {
-    touchPaddle = player1;
+  if (aiMode) {
+    touchPaddle = player1; // Only control player 1 in AI mode
   } else {
-    touchPaddle = player2;
+    if (x < canvas.width / 2) {
+      touchPaddle = player1;
+    } else {
+      touchPaddle = player2;
+    }
   }
 });
 
 canvas.addEventListener('touchmove', (e) => {
   e.preventDefault();
-  if (!touchPaddle) return;
+  if (!touchPaddle || !gameStarted || gamePaused || gameOver) return;
   
   const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
-  const y = touch.clientY - rect.top;
+  const scaleY = canvas.height / rect.height;
+  const y = (touch.clientY - rect.top) * scaleY;
   
-  touchPaddle.y = y - touchPaddle.height / 2;
+  // Smooth paddle movement with touch
+  const targetY = y - touchPaddle.height / 2;
+  touchPaddle.y = targetY;
   
   // Boundary checks
   if (touchPaddle.y < 0) touchPaddle.y = 0;
@@ -380,6 +402,12 @@ canvas.addEventListener('touchmove', (e) => {
 });
 
 canvas.addEventListener('touchend', () => {
+  touchPaddle = null;
+});
+
+// Prevent default touch behaviors on the canvas
+canvas.addEventListener('touchcancel', (e) => {
+  e.preventDefault();
   touchPaddle = null;
 });
 

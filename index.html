@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Ping Pong Game</title>
     <style>
         * {
@@ -32,6 +34,9 @@
           overscroll-behavior: none;
           margin: 0;
           padding: 0;
+          -webkit-user-select: none;
+          user-select: none;
+          touch-action: none;
         }
 
         .container {
@@ -245,6 +250,67 @@
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
           display: block;
           margin: 0 auto;
+          max-width: 100%;
+          max-height: 70vh;
+          touch-action: none;
+        }
+
+        .mobile-menu-btn {
+          display: none;
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          background: rgba(255, 255, 255, 0.2);
+          border: 2px solid rgba(255, 255, 255, 0.4);
+          color: white;
+          padding: 10px 15px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: bold;
+          z-index: 1000;
+          cursor: pointer;
+          backdrop-filter: blur(5px);
+        }
+
+        @media (max-width: 768px) {
+          .mobile-menu-btn {
+            display: block;
+          }
+          
+          h1 {
+            font-size: 2rem;
+          }
+          
+          .controls {
+            font-size: 0.75rem;
+          }
+          
+          canvas {
+            max-height: 60vh;
+          }
+        }
+
+        @media (orientation: landscape) and (max-width: 900px) {
+          .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+          }
+          
+          h1 {
+            font-size: 1.5rem;
+            margin: 0;
+          }
+          
+          .controls {
+            display: none;
+          }
+          
+          canvas {
+            max-height: 85vh;
+            max-width: 70vw;
+          }
         }
     </style>
 </head>
@@ -266,6 +332,7 @@
             <button class="difficulty-btn hard" data-difficulty="hard">Hard</button>
         </div>
         <div id="gameContainer" class="game-container" style="display: none;">
+            <button id="mobileMenuBtn" class="mobile-menu-btn">📱 Menu</button>
             <div class="controls">
                 <p id="controlsText">Player 1: W/S keys | Player 2: ↑/↓ keys</p>
                 <p>Press SPACE to start/pause | Press ESC for main menu</p>
