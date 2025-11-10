@@ -346,9 +346,8 @@ document.addEventListener('keyup', (e) => {
   }
 });
 
-// Touch controls for mobile
-let touchStartY = 0;
-let touchPaddle = null;
+// Touch controls for mobile - Multi-touch support
+const activeTouches = new Map(); // Track multiple touches
 
 canvas.addEventListener('touchstart', (e) => {
   e.preventDefault();
@@ -360,55 +359,75 @@ canvas.addEventListener('touchstart', (e) => {
     audioContext.resume();
   }
   
-  const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
   const scaleX = canvas.width / rect.width;
   const scaleY = canvas.height / rect.height;
-  const x = (touch.clientX - rect.left) * scaleX;
-  const y = (touch.clientY - rect.top) * scaleY;
   
-  touchStartY = y;
-  
-  // Determine which paddle to control based on touch position
-  if (aiMode) {
-    touchPaddle = player1; // Only control player 1 in AI mode
-  } else {
-    if (x < canvas.width / 2) {
-      touchPaddle = player1;
+  // Handle all touches
+  for (let i = 0; i < e.touches.length; i++) {
+    const touch = e.touches[i];
+    const x = (touch.clientX - rect.left) * scaleX;
+    const y = (touch.clientY - rect.top) * scaleY;
+    
+    // Determine which paddle based on touch position
+    let paddle;
+    if (aiMode) {
+      paddle = player1; // Only control player 1 in AI mode
     } else {
-      touchPaddle = player2;
+      paddle = x < canvas.width / 2 ? player1 : player2;
     }
+    
+    // Store this touch with its paddle
+    activeTouches.set(touch.identifier, { paddle, initialY: y });
   }
 });
 
 canvas.addEventListener('touchmove', (e) => {
   e.preventDefault();
-  if (!touchPaddle || !gameStarted || gamePaused || gameOver) return;
+  if (!gameStarted || gamePaused || gameOver) return;
   
-  const touch = e.touches[0];
   const rect = canvas.getBoundingClientRect();
   const scaleY = canvas.height / rect.height;
-  const y = (touch.clientY - rect.top) * scaleY;
   
-  // Smooth paddle movement with touch
-  const targetY = y - touchPaddle.height / 2;
-  touchPaddle.y = targetY;
-  
-  // Boundary checks
-  if (touchPaddle.y < 0) touchPaddle.y = 0;
-  if (touchPaddle.y + touchPaddle.height > canvas.height) {
-    touchPaddle.y = canvas.height - touchPaddle.height;
+  // Update all active touches
+  for (let i = 0; i < e.touches.length; i++) {
+    const touch = e.touches[i];
+    const touchData = activeTouches.get(touch.identifier);
+    
+    if (touchData) {
+      const y = (touch.clientY - rect.top) * scaleY;
+      const targetY = y - touchData.paddle.height / 2;
+      touchData.paddle.y = targetY;
+      
+      // Boundary checks
+      if (touchData.paddle.y < 0) touchData.paddle.y = 0;
+      if (touchData.paddle.y + touchData.paddle.height > canvas.height) {
+        touchData.paddle.y = canvas.height - touchData.paddle.height;
+      }
+    }
   }
 });
 
-canvas.addEventListener('touchend', () => {
-  touchPaddle = null;
+canvas.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  
+  // Remove ended touches
+  const currentTouches = new Set();
+  for (let i = 0; i < e.touches.length; i++) {
+    currentTouches.add(e.touches[i].identifier);
+  }
+  
+  // Clear touches that ended
+  for (const [id] of activeTouches) {
+    if (!currentTouches.has(id)) {
+      activeTouches.delete(id);
+    }
+  }
 });
 
-// Prevent default touch behaviors on the canvas
 canvas.addEventListener('touchcancel', (e) => {
   e.preventDefault();
-  touchPaddle = null;
+  activeTouches.clear();
 });
 
 function updatePaddles() {
@@ -418,11 +437,15 @@ function updatePaddles() {
     return;
   }
   
+  // Check if paddle is being touch controlled
+  const p1TouchControlled = Array.from(activeTouches.values()).some(t => t.paddle === player1);
+  const p2TouchControlled = Array.from(activeTouches.values()).some(t => t.paddle === player2);
+  
   // Player 1 controls (dynamic based on settings)
   const p1Up = keys[player1Controls.up] || keys[player1Controls.up.toLowerCase()] || keys[player1Controls.up.toUpperCase()];
   const p1Down = keys[player1Controls.down] || keys[player1Controls.down.toLowerCase()] || keys[player1Controls.down.toUpperCase()];
   
-  if (!touchPaddle || touchPaddle !== player1) {
+  if (!p1TouchControlled) {
     if (p1Up && !p1Down) {
       player1.dy = -PADDLE_SPEED;
     } else if (p1Down && !p1Up) {
@@ -453,7 +476,7 @@ function updatePaddles() {
     const p2Up = keys[player2Controls.up] || keys[player2Controls.up.toLowerCase()] || keys[player2Controls.up.toUpperCase()];
     const p2Down = keys[player2Controls.down] || keys[player2Controls.down.toLowerCase()] || keys[player2Controls.down.toUpperCase()];
     
-    if (!touchPaddle || touchPaddle !== player2) {
+    if (!p2TouchControlled) {
       if (p2Up && !p2Down) {
         player2.dy = -PADDLE_SPEED;
       } else if (p2Down && !p2Up) {
@@ -464,9 +487,9 @@ function updatePaddles() {
     }
   }
 
-  // Update positions
-  if (touchPaddle !== player1) player1.y += player1.dy;
-  if (touchPaddle !== player2) player2.y += player2.dy;
+  // Update positions (only if not touch controlled)
+  if (!p1TouchControlled) player1.y += player1.dy;
+  if (!p2TouchControlled) player2.y += player2.dy;
 
   // Boundary checks with safety stop
   if (player1.y < 0) {
