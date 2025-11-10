@@ -43,8 +43,16 @@ A modern, feature-rich browser-based ping pong game built with HTML5 Canvas and 
   - Player 2: `↑` / `↓` arrow keys (default) or `W` / `S` keys
   - `SPACE` - Start/Pause game
   - `ESC` - Return to main menu
-- **Touch Controls** - Tap and drag on left/right side of screen for mobile gameplay
+- **Multi-Touch Controls** - Full mobile support with simultaneous control
+  - Tap anywhere on screen to start game
+  - Drag on left side to control Player 1 paddle
+  - Drag on right side to control Player 2 paddle
+  - Both players can control paddles simultaneously with different fingers
+  - Mobile menu button (📱) for easy navigation
 - **Settings Menu** - Change control schemes for each player from the main menu
+- **Responsive Design** - Optimized for portrait and landscape orientations
+  - Landscape mode provides fullscreen gameplay experience
+  - No white borders or wasted space
 
 ### 📊 Statistics Tracking
 - Real-time rally counter during gameplay
@@ -64,12 +72,12 @@ A modern, feature-rich browser-based ping pong game built with HTML5 Canvas and 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/pingpong-game.git
+git clone https://github.com/parpy69/PingPongGame.git
 ```
 
 2. Navigate to the project directory:
 ```bash
-cd pingpong-game
+cd PingPongGame
 ```
 
 3. Open `index.html` in your web browser:
@@ -90,9 +98,10 @@ Or simply double-click the `index.html` file.
 3. **Choose Difficulty** (AI mode only) - Pick Easy, Medium, or Hard
 4. **Press SPACE** to start the game
 5. **Control Your Paddle**:
-   - Player 1: Use `W` (up) and `S` (down) by default
-   - Player 2: Use `↑` (up) and `↓` (down) by default
-   - Mobile: Tap and drag on your side of the screen
+   - **Desktop:** Use `W` (up) and `S` (down) by default for Player 1
+   - **Desktop:** Use `↑` (up) and `↓` (down) by default for Player 2
+   - **Mobile/Tablet:** Tap screen to start, then drag on your side to control
+   - **Multi-player on Mobile:** Both players can control their paddles simultaneously
    - Or customize in settings to swap controls!
 6. **Score Points** - Make your opponent miss the ball
 7. **First to 5 Wins!**
@@ -105,9 +114,11 @@ Or simply double-click the `index.html` file.
 | Move Down (P1) | `S` (default) or `↓` | ✅ Yes |
 | Move Up (P2) | `↑` (default) or `W` | ✅ Yes |
 | Move Down (P2) | `↓` (default) or `S` | ✅ Yes |
-| Start/Pause | `SPACE` | ❌ No |
-| Main Menu | `ESC` | ❌ No |
-| Touch Control | Drag on screen | ❌ No |
+| Start/Pause | `SPACE` or Touch screen | ❌ No |
+| Main Menu | `ESC` or 📱 Menu button | ❌ No |
+| Touch Control (P1) | Drag on left side | ❌ No |
+| Touch Control (P2) | Drag on right side | ❌ No |
+| Multi-Touch | Both players simultaneously | ✅ Supported |
 | Open Settings | Main menu button | - |
 
 ## 🛠️ Technologies Used
@@ -126,6 +137,14 @@ Players can choose their preferred control scheme:
 - Swap between WASD and Arrow keys
 - Settings persist during gameplay session
 - Dynamic control text updates based on configuration
+
+### Multi-Touch Support
+Advanced touch handling for mobile devices:
+- `Map()` data structure tracks multiple touch points simultaneously
+- Each touch assigned unique identifier for precise tracking
+- Coordinate scaling accounts for canvas/viewport differences
+- Touch detection determines left/right paddle assignment
+- Smooth simultaneous control for two players on one device
 
 ### AI Implementation
 The AI opponent uses a dynamic tracking algorithm with configurable parameters:
@@ -186,6 +205,8 @@ const AI_SETTINGS = {
 ## 🔮 Future Enhancements
 
 - [x] Customizable control schemes ✅
+- [x] Multi-touch mobile support ✅
+- [x] Landscape mode optimization ✅
 - [ ] Power-ups system (speed boost, paddle size)
 - [ ] Online multiplayer support
 - [ ] Leaderboard with localStorage
@@ -229,9 +250,10 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 ## 👨‍💻 Author
 
 **Abdullah Khudeish**
-
 - GitHub: [@parpy69](https://github.com/parpy69)
 - LinkedIn: [Abdullah Khudeish](https://www.linkedin.com/in/abdullah-khudeish-3a010923a/)
+- Project Repository: [PingPongGame](https://github.com/parpy69/PingPongGame)
+- Live Demo: [Play Now](https://pingponggame-gray.vercel.app)
 
 ## ⭐ Show Your Support
 
